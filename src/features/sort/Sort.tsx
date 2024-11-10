@@ -14,11 +14,20 @@ function getClasses(option: SortType, currenOption: SortType | null): string {
   return option === currenOption ? classesMap.active : classesMap.inactive;
 }
 
-export function Sort({currentOption}: SortProps): ReactElement {
+export function Sort({currentOption, onChange}: SortProps): ReactElement {
+  const sortOptionsList: SortType[] = ['age', 'name'];
+
   return(
     <div className="space-x-2">
-      <Button className={getClasses('name', currentOption)}>Sort by name</Button>
-      <Button className={getClasses('age', currentOption)}>Sort by age</Button>
+      {sortOptionsList.map(sortOption => (
+        <Button
+          key={sortOption}
+          className={getClasses(sortOption, currentOption)}
+          onClick={() => onChange(sortOption === currentOption ? null : sortOption)}
+        >
+          Sort by {sortOption}
+        </Button>
+      ))}
     </div>
   );
 }

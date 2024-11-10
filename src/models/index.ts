@@ -7,16 +7,11 @@ export type User = {
   favoriteColor: FavoriteColor;
 };
 
-export type PaginationState = {
-  pagesTotal?: number;
-  currentPage: number;
-  itemsPerPage: number;
-};
-
 export type ProcessingState = {
   sort: SortType | null;
   filter: FavoriteColor | null;
-  pagination: PaginationState;
+  currentPage: number;
+  itemsPerPage: number;
   search: string;
 };
 
@@ -29,6 +24,7 @@ export type Controls = {
 
 export type ControlProps<T> = {
   currentOption: T;
+  onChange: (value: T) => void
 };
 
 export type ControlClasses = {
