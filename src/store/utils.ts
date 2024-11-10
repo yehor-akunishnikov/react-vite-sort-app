@@ -1,4 +1,5 @@
-import {FavoriteColor, ProcessingState, SortType, User} from '../../models';
+import {ProcessingState, SortType} from './models.ts';
+import {FavoriteColor, User} from '../models';
 
 const sortUsers = (usersList: User[], sortType: SortType): void => {
   switch (sortType) {
@@ -32,7 +33,7 @@ const sliceUsers = (usersList: User[], currentPage: number, itemsPerPage: number
   return usersList.slice(from, to);
 };
 
-export const applyFilters = (
+export const applyProcessing = (
   usersList: User[],
   processingState: ProcessingState
 ): {
