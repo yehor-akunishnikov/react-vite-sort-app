@@ -15,13 +15,6 @@ export type ProcessingState = {
   search: string;
 };
 
-export type Controls = {
-  search: HTMLInputElement;
-  sortByAgeBtn: HTMLButtonElement;
-  sortByNameBtn: HTMLButtonElement;
-  colorButtons: NodeListOf<HTMLButtonElement>;
-};
-
 export type ControlProps<T> = {
   currentOption: T;
   onChange: (value: T) => void
