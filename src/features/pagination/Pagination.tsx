@@ -3,6 +3,8 @@ import {ReactElement} from 'react';
 import {Button} from '../../common/components/Button.tsx';
 import {ControlClasses, ControlProps} from '../../models';
 
+import './Pagination.css';
+
 export type PaginationProps = ControlProps<number> & {count: number};
 
 function getClasses(index: number, currentOption: number | null): string {
@@ -14,14 +16,18 @@ function getClasses(index: number, currentOption: number | null): string {
   return index === currentOption ? classesMap.active : classesMap.inactive;
 }
 
-export function Pagination({count, currentOption}: PaginationProps): ReactElement {
+export function Pagination({currentOption, onChange, count}: PaginationProps): ReactElement {
   return (
-    <div className="flex justify-center flex-wrap gap-2">
+    <div className="pagination flex justify-center flex-wrap gap-2">
       {
         Array.from(
           {length: count},
           (_, index) => (
-            <Button key={index} className={getClasses(index, currentOption)}>
+            <Button
+              key={index}
+              className={getClasses(index, currentOption)}
+              onClick={() => onChange(index)}
+            >
               {index + 1}
             </Button>
           )

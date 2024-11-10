@@ -5,36 +5,73 @@ import {UsersList} from './features/list/UsersList.tsx';
 import {Search} from './features/search/Search.tsx';
 import {Filter} from './features/filter/Filter.tsx';
 import {Sort} from './features/sort/Sort.tsx';
-import {User} from './models';
+
+import {applyProcessing} from './common/utils/utils.ts';
+import {FavoriteColor, SortType, User} from './models';
 
 import './App.css';
 
 function App(): ReactElement {
+  const [defaultUsers, setDefaultUsers] = useState<User[]>([]);
   const [users, setUsers] = useState<User[]>([]);
+
+  const [sort, setSort] = useState<SortType | null>(null);
+  const [filter, setFilter] = useState<FavoriteColor | null>(null);
+  const [search, setSearch] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [pagesTotal, setPagesTotal] = useState<number>(0);
 
   useEffect(() => {
     fetch('src/assets/users.json')
       .then((res) => res.json())
-      .then(users => setUsers(users))
+      .then((loadedUsers: User[]) => setDefaultUsers(loadedUsers));
   }, []);
+
+  useEffect(() => {
+    const {newUsersList, newPagesTotal} = applyProcessing(defaultUsers, {
+      sort,
+      filter,
+      search,
+      itemsPerPage: 10,
+      currentPage
+    });
+
+    if (pagesTotal !== newPagesTotal) {
+      setPagesTotal(newPagesTotal);
+      setCurrentPage(0);
+    }
+
+    setUsers(newUsersList);
+  }, [defaultUsers, sort, filter, search, currentPage, pagesTotal]);
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center">
       <div className="w-full max-w-screen-md p-4 space-y-4">
         <div>
-          <Search currentOption={''}/>
+          <Search
+            currentOption={search}
+            onChange={setSearch}
+          />
         </div>
 
         <div className="flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
-          <Sort currentOption={null}/>
-          <Filter currentOption={null}/>
+          <Sort
+            currentOption={sort}
+            onChange={setSort}
+          />
+          <Filter
+            currentOption={filter}
+            onChange={setFilter}
+          />
         </div>
 
-        <div>
-          <UsersList users={users}/>
-        </div>
+        <UsersList users={users}/>
 
-        <Pagination currentOption={0} count={10}/>
+        <Pagination
+          currentOption={currentPage}
+          count={pagesTotal}
+          onChange={setCurrentPage}
+        />
       </div>
     </div>
   );
