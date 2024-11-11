@@ -1,7 +1,8 @@
 import {ReactElement} from 'react';
 
 import {Button} from '../../common/components/Button.tsx';
-import {ControlClasses, ControlProps, SortType} from '../../models';
+import {ControlClasses, ControlProps} from '../../models';
+import {SortType} from '../../store/models.ts';
 
 type SortProps = ControlProps<SortType | null>;
 
@@ -14,8 +15,17 @@ function getClasses(option: SortType, currenOption: SortType | null): string {
   return option === currenOption ? classesMap.active : classesMap.inactive;
 }
 
-export function Sort({currentOption, onChange}: SortProps): ReactElement {
+export function Sort({currentOption, dispatch}: SortProps): ReactElement {
   const sortOptionsList: SortType[] = ['age', 'name'];
+
+  function onChange(sortOption: SortType, currentOption: SortType | null): void {
+    dispatch({
+      type: 'SetSort',
+      payload: {
+        sort: sortOption === currentOption ? null : sortOption
+      }
+    });
+  }
 
   return(
     <div className="space-x-2">
@@ -23,7 +33,7 @@ export function Sort({currentOption, onChange}: SortProps): ReactElement {
         <Button
           key={sortOption}
           className={getClasses(sortOption, currentOption)}
-          onClick={() => onChange(sortOption === currentOption ? null : sortOption)}
+          onClick={() => onChange(sortOption, currentOption)}
         >
           Sort by {sortOption}
         </Button>

@@ -1,5 +1,8 @@
+import {Dispatch} from 'react';
+
+import {StoreAction} from '../store/models.ts';
+
 export type FavoriteColor = 'red' | 'blue' | 'orange' | 'green';
-export type SortType = 'age' | 'name';
 
 export type User = {
   name: string;
@@ -7,17 +10,9 @@ export type User = {
   favoriteColor: FavoriteColor;
 };
 
-export type ProcessingState = {
-  sort: SortType | null;
-  filter: FavoriteColor | null;
-  currentPage: number;
-  itemsPerPage: number;
-  search: string;
-};
-
 export type ControlProps<T> = {
   currentOption: T;
-  onChange: (value: T) => void
+  dispatch: Dispatch<StoreAction>;
 };
 
 export type ControlClasses = {

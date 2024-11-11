@@ -16,18 +16,27 @@ function getClasses(option: FavoriteColor, currenOption: FavoriteColor | null): 
   return option === currenOption ? classesMap[option].active : classesMap[option].inactive;
 }
 
-export function Filter({currentOption, onChange}: FilterProps): ReactElement {
-  const filtersList: FavoriteColor[] = ['red', 'blue', 'orange', 'green'];
+export function Filter({currentOption, dispatch}: FilterProps): ReactElement {
+  const filterOptionsList: FavoriteColor[] = ['red', 'blue', 'orange', 'green'];
+
+  function onChange(filterOption: FavoriteColor, currentOption: FavoriteColor | null): void {
+    dispatch({
+      type: 'SetFilter',
+      payload: {
+        filter: currentOption === filterOption ? null : filterOption
+      }
+    });
+  }
 
   return(
     <div className="space-x-2">
-      {filtersList.map(filter => (
+      {filterOptionsList.map(filterOption => (
         <Button
-          key={filter}
-          className={getClasses(filter, currentOption)}
-          onClick={() => onChange(currentOption === filter ? null: filter)}
+          key={filterOption}
+          className={getClasses(filterOption, currentOption)}
+          onClick={() => onChange(filterOption, currentOption)}
         >
-          {filter[0].toUpperCase() + filter.slice(1)}
+          {filterOption[0].toUpperCase() + filterOption.slice(1)}
         </Button>
       ))}
     </div>
