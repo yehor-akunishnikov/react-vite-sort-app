@@ -1,10 +1,9 @@
-import {ReactElement} from 'react';
+import {ReactElement, useContext} from 'react';
 
+import {StoreContext, StoreDispatchContext} from '../../store/store.ts';
 import {Button} from '../../common/components/Button.tsx';
-import {ControlClasses, ControlProps} from '../../models';
 import {SortType} from '../../store/models.ts';
-
-type SortProps = ControlProps<SortType | null>;
+import {ControlClasses} from '../../models';
 
 function getClasses(option: SortType, currenOption: SortType | null): string {
   const classesMap: ControlClasses = {
@@ -15,7 +14,10 @@ function getClasses(option: SortType, currenOption: SortType | null): string {
   return option === currenOption ? classesMap.active : classesMap.inactive;
 }
 
-export function Sort({currentOption, dispatch}: SortProps): ReactElement {
+export function Sort(): ReactElement {
+  const dispatch = useContext(StoreDispatchContext);
+  const state = useContext(StoreContext);
+
   const sortOptionsList: SortType[] = ['age', 'name'];
 
   function onChange(sortOption: SortType, currentOption: SortType | null): void {
@@ -32,8 +34,8 @@ export function Sort({currentOption, dispatch}: SortProps): ReactElement {
       {sortOptionsList.map(sortOption => (
         <Button
           key={sortOption}
-          className={getClasses(sortOption, currentOption)}
-          onClick={() => onChange(sortOption, currentOption)}
+          className={getClasses(sortOption, state.processing.sort)}
+          onClick={() => onChange(sortOption, state.processing.sort)}
         >
           Sort by {sortOption}
         </Button>

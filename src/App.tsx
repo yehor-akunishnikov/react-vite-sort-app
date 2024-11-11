@@ -1,18 +1,18 @@
-import {ReactElement, useEffect} from 'react';
+import {ReactElement, useContext, useEffect} from 'react';
 
 import {Pagination} from './features/pagination/Pagination.tsx';
 import {UsersList} from './features/list/UsersList.tsx';
 import {Search} from './features/search/Search.tsx';
 import {Filter} from './features/filter/Filter.tsx';
 import {Sort} from './features/sort/Sort.tsx';
-import {User} from './models';
 
-import {useStore} from './store/store.ts';
+import {StoreDispatchContext} from './store/store.ts';
+import {User} from './models';
 
 import './App.css';
 
 function App(): ReactElement {
-  const {state, dispatch} = useStore();
+  const dispatch = useContext(StoreDispatchContext);
 
   useEffect(() => {
     fetch('src/assets/users.json')
@@ -27,30 +27,17 @@ function App(): ReactElement {
     <div className="min-h-screen w-full flex items-center justify-center">
       <div className="w-full max-w-screen-md p-4 space-y-4">
         <div>
-          <Search
-            currentOption={state.processing.search}
-            dispatch={dispatch}
-          />
+          <Search />
         </div>
 
         <div className="flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
-          <Sort
-            currentOption={state.processing.sort}
-            dispatch={dispatch}
-          />
-          <Filter
-            currentOption={state.processing.filter}
-            dispatch={dispatch}
-          />
+          <Sort />
+          <Filter />
         </div>
 
-        <UsersList users={state.currentUsers}/>
+        <UsersList />
 
-        <Pagination
-          currentOption={state.processing.currentPage}
-          count={state.processing.pagesTotal}
-          dispatch={dispatch}
-        />
+        <Pagination />
       </div>
     </div>
   );

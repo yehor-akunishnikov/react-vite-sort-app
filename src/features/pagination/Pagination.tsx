@@ -1,11 +1,10 @@
-import {ReactElement} from 'react';
+import {ReactElement, useContext} from 'react';
 
+import {StoreContext, StoreDispatchContext} from '../../store/store.ts';
 import {Button} from '../../common/components/Button.tsx';
-import {ControlClasses, ControlProps} from '../../models';
+import {ControlClasses} from '../../models';
 
 import './Pagination.css';
-
-export type PaginationProps = ControlProps<number> & {count: number};
 
 function getClasses(index: number, currentOption: number | null): string {
   const classesMap: ControlClasses = {
@@ -16,7 +15,10 @@ function getClasses(index: number, currentOption: number | null): string {
   return index === currentOption ? classesMap.active : classesMap.inactive;
 }
 
-export function Pagination({currentOption, dispatch, count}: PaginationProps): ReactElement {
+export function Pagination(): ReactElement {
+  const dispatch = useContext(StoreDispatchContext);
+  const state = useContext(StoreContext);
+
   function onChange(pageIndex: number): void {
     dispatch({
       type: 'SetCurrentPage',
@@ -30,11 +32,11 @@ export function Pagination({currentOption, dispatch, count}: PaginationProps): R
     <div className="pagination flex justify-center flex-wrap gap-2">
       {
         Array.from(
-          {length: count},
+          {length: state.processing.pagesTotal},
           (_, index) => (
             <Button
               key={index}
-              className={getClasses(index, currentOption)}
+              className={getClasses(index, state.processing.currentPage)}
               onClick={() => onChange(index)}
             >
               {index + 1}

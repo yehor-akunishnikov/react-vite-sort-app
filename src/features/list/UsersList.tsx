@@ -1,19 +1,17 @@
-import {ReactElement} from 'react';
+import {ReactElement, useContext} from 'react';
 
+import {StoreContext} from '../../store/store.ts';
 import {UsersListItem} from './UsersListItem.tsx';
-import {User} from '../../models';
 
 import './UsersList.css';
 
-type UsersListProps = {
-  users: User[];
-};
+export function UsersList(): ReactElement {
+  const state = useContext(StoreContext);
 
-export function UsersList({users}: UsersListProps): ReactElement {
   return (
     <ul className="users-list p-2 space-y-2 border border-black rounded">
       {
-        users.map(user => (
+        state.currentUsers.map(user => (
           <UsersListItem
             key={user.name + user.age}
             user={user}

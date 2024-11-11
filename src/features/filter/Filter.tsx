@@ -1,9 +1,8 @@
-import {ReactElement} from 'react';
+import {ReactElement, useContext} from 'react';
 
+import {StoreContext, StoreDispatchContext} from '../../store/store.ts';
+import {ControlClasses, FavoriteColor} from '../../models';
 import {Button} from '../../common/components/Button.tsx';
-import {ControlClasses, ControlProps, FavoriteColor} from '../../models';
-
-type FilterProps = ControlProps<FavoriteColor | null>;
 
 function getClasses(option: FavoriteColor, currenOption: FavoriteColor | null): string {
   const classesMap: Record<FavoriteColor, ControlClasses> = {
@@ -16,7 +15,10 @@ function getClasses(option: FavoriteColor, currenOption: FavoriteColor | null): 
   return option === currenOption ? classesMap[option].active : classesMap[option].inactive;
 }
 
-export function Filter({currentOption, dispatch}: FilterProps): ReactElement {
+export function Filter(): ReactElement {
+  const dispatch = useContext(StoreDispatchContext);
+  const state = useContext(StoreContext);
+
   const filterOptionsList: FavoriteColor[] = ['red', 'blue', 'orange', 'green'];
 
   function onChange(filterOption: FavoriteColor, currentOption: FavoriteColor | null): void {
@@ -33,8 +35,8 @@ export function Filter({currentOption, dispatch}: FilterProps): ReactElement {
       {filterOptionsList.map(filterOption => (
         <Button
           key={filterOption}
-          className={getClasses(filterOption, currentOption)}
-          onClick={() => onChange(filterOption, currentOption)}
+          className={getClasses(filterOption, state.processing.filter)}
+          onClick={() => onChange(filterOption, state.processing.filter)}
         >
           {filterOption[0].toUpperCase() + filterOption.slice(1)}
         </Button>

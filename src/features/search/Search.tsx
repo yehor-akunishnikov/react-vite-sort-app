@@ -1,10 +1,11 @@
-import {FormEvent, ReactElement} from 'react';
+import {FormEvent, ReactElement, useContext} from 'react';
 
-import {ControlProps} from '../../models';
+import {StoreContext, StoreDispatchContext} from '../../store/store.ts';
 
-type SearchProps = ControlProps<string>;
+export function Search(): ReactElement {
+  const dispatch = useContext(StoreDispatchContext);
+  const state = useContext(StoreContext);
 
-export function Search({currentOption, dispatch}: SearchProps): ReactElement {
   function onInput(e: FormEvent): void {
     dispatch({
       type: 'SetSearch',
@@ -16,7 +17,7 @@ export function Search({currentOption, dispatch}: SearchProps): ReactElement {
 
   return (
     <input
-      defaultValue={currentOption}
+      defaultValue={state.processing.search}
       className="w-full py-1 px-3 border border-black rounded"
       placeholder="Search..."
       type="text"
