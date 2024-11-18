@@ -3,9 +3,9 @@ import {ReactElement} from 'react';
 import {Button} from '../../common/components/Button.tsx';
 import {ControlClasses, ControlProps, FavoriteColor} from '../../models';
 
-type FilterProps = ControlProps<FavoriteColor | null>;
+type FilterProps = ControlProps<FavoriteColor | null> & {setFilter: (color: FavoriteColor | null) => void};
 
-function getClasses(option: FavoriteColor, currenOption: FavoriteColor | null): string {
+function getClasses(option: FavoriteColor, currentOption: FavoriteColor | null): string {
   const classesMap: Record<FavoriteColor, ControlClasses> = {
     red: {active: 'bg-red-300 hover:bg-red-200', inactive: 'hover:bg-red-300'},
     blue: {active: 'bg-blue-300 hover:bg-blue-200', inactive: 'hover:bg-blue-300'},
@@ -13,20 +13,29 @@ function getClasses(option: FavoriteColor, currenOption: FavoriteColor | null): 
     green: {active: 'bg-green-300 hover:bg-green-200', inactive: 'hover:bg-green-300'}
   };
 
-  return option === currenOption ? classesMap[option].active : classesMap[option].inactive;
+  return option === currentOption ? classesMap[option].active : classesMap[option].inactive;
 }
 
-export function Filter({currentOption}: FilterProps): ReactElement {
-  const filtersList: FavoriteColor[] = ['red', 'blue', 'orange', 'green'];
+export function Filter({currentOption, setFilter}: FilterProps): ReactElement {
+  const colorList: FavoriteColor[] = ['red', 'blue', 'orange', 'green'];
+
+  function onFilterClick(color: FavoriteColor | null) {
+    if (color === currentOption) {
+      setFilter(null);
+    } else {
+      setFilter(color);
+    }
+  }
 
   return(
     <div className="space-x-2">
-      {filtersList.map(filter => (
+      {colorList.map(color => (
         <Button
-          key={filter}
-          className={getClasses(filter, currentOption)}
+          key={color}
+          className={getClasses(color, currentOption)}
+          onClick={() => onFilterClick(color)}
         >
-          {filter[0].toUpperCase() + filter.slice(1)}
+          {color[0].toUpperCase() + color.slice(1)}
         </Button>
       ))}
     </div>

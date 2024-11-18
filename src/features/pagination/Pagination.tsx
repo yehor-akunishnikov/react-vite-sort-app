@@ -5,7 +5,12 @@ import {ControlClasses, ControlProps} from '../../models';
 
 import './Pagination.css';
 
-export type PaginationProps = ControlProps<number> & {count: number};
+export type PaginationProps = (
+    ControlProps<number>
+    & {currentOption: number}
+    & {currentPagesCount: number}
+    & {setPaginationState: (pageNumber: number) => void}
+);
 
 function getClasses(index: number, currentOption: number | null): string {
   const classesMap: ControlClasses = {
@@ -16,14 +21,22 @@ function getClasses(index: number, currentOption: number | null): string {
   return index === currentOption ? classesMap.active : classesMap.inactive;
 }
 
-export function Pagination({currentOption, count}: PaginationProps): ReactElement {
+export function Pagination({currentOption, currentPagesCount, setPaginationState}: PaginationProps): ReactElement {
+  function onPaginationClick(pageNumber: number) {
+    if (pageNumber !== currentOption) {
+      setPaginationState(pageNumber);
+    }
+  }
+
   return (
     <div className="pagination flex justify-center flex-wrap gap-2">
       {
         Array.from(
-          {length: count},
+          {length: currentPagesCount},
           (_, index) => (
-            <Button key={index} className={getClasses(index, currentOption)}>
+            <Button key={index}
+                    className={getClasses(index, currentOption)}
+                    onClick={() => onPaginationClick(index)}>
               {index + 1}
             </Button>
           )
