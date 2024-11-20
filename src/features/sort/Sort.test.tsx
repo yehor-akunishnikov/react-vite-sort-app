@@ -39,4 +39,16 @@ describe('Sort component test', () => {
         expect(setSortBySpy).toHaveBeenCalledWith('age');
         expect(setSortBySpy).toHaveBeenCalledWith('name');
     });
+    it('should reset state on active button click', () => {
+        const setSortBySpy = vi.fn();
+
+        render(<Sort currentOption={'age'} setSortBy={setSortBySpy}/>);
+
+        const sortBtns = screen.getAllByTestId('sortBtn');
+
+        fireEvent.click(sortBtns[0]);
+
+        expect(setSortBySpy).toHaveBeenCalledTimes(1);
+        expect(setSortBySpy).toHaveBeenCalledWith(null);
+    });
 });

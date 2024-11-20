@@ -17,6 +17,7 @@ export function Search({currentOption, setSearch}: SearchProps): ReactElement {
       placeholder="Search..."
       type="text"
       onInput={onSearchInputChanges}
+      data-testid={'searchInput'}
     />
   );
 }

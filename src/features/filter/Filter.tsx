@@ -34,6 +34,7 @@ export function Filter({currentOption, setFilter}: FilterProps): ReactElement {
           key={color}
           className={getClasses(color, currentOption)}
           onClick={() => onFilterClick(color)}
+          data-testid={'filterButton'}
         >
           {color[0].toUpperCase() + color.slice(1)}
         </Button>
